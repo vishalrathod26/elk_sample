@@ -1,0 +1,334 @@
+#watchmaker yaml that uses external config map to bring in config files to container
+#Command to create the prerequisite external config map for this yaml
+#  kubectl create configmap -n elasticsearch watch-maker-files --from-literal=ELASTICSEARCH_URL=http://elasticsearch-ingress.elasticsearch.svc.cluster.local:80 --from-file=python --from-file=config
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: elasticsearch
+  name: watch-maker
+data:
+  watchmaker.py: |
+
+     import requests
+     import sys
+     import os
+     import argparse
+     import json
+     import time
+     from datetime import timezone 
+     import datetime
+     import pytz
+
+     sys.path.append('/etc/config'`)
+
+     from watcher import *
+     from wrapperjson import *
+     from kibana_grant_access import *
+
+     parser = argparse.ArgumentParser()
+     parser.add_argument("userID",help="fid or cid of user")
+     parser.add_argument("password", help="password of user")
+     parser.add_argument("elasticsearch_url",help="elasticsearch url")
+     args = parser.parse_args()
+
+     userId=args.userID
+     password=args.password
+     elasticsearch_url=args.elasticsearch_url
+
+     id = "Nothing"
+
+     s = requests.Session()
+     s.auth = (userId, password)
+     
+
+     def log(log):
+
+         headers = {
+             'Content-Type': 'application/json',
+         }
+
+         dt = datetime.datetime.now() 
+  
+         utc_time = dt.replace(tzinfo = timezone.utc) 
+
+         data = "{  \"request\": \""+id+"\",  \"log\": \""+str(log)+"\"  ,    \"@timestamp\": \""+utc_time.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+"\"}"
+
+         response = requests.post(elasticsearch_url+'/watchmaker-logs-'+utc_time.strftime("%Y.%m.%d")+'/_doc/', headers=headers, data=data, auth=(userId,password))
+
+         print(response.json())
+
+
+
+     #Assigning the correct roles to all possible combinations of space_name + access_level + environment
+     space_role_dict = {"change_management_read_np": "change_management_read_only", "change_management_write_np": "change_management_write_role", "change_management_read_prod": "change_management_read_only",
+                    "enterprise_confidential_read_np": "enterprise_confidential_read_user", "enterprise_confidential_write_np": "enterprise_confidential_dev_role", "enterprise_confidential_read_prod": "enterprise_confidential_read_user",
+                    "it_shared_services_read_np": "it_support_read_only", "it_shared_services_write_np": "it_support_dev_user", "it_shared_services_read_prod": "it_support_read_only",
+                    "investments_capital_markets_read_np": "icm_read_only", "investments_capital_markets_write_np": "icm_write_user", "investments_capital_markets_read_prod": "icm_read_only",
+                    "multi_family_read_np": "multi_family_read_only", "multi_family_write_np": "multi_family_dev_user", "multi_family_read_prod": "multi_family_read_only",
+                    "single_family_read_np": "single_family_read_only", "single_family_write_np": "single_family_write_role", "single_family_read_prod": "single_family_read_only",
+                    "single_family_platform_read_np": "single_family_PL_read_only", "single_family_platform_write_np": "single_family_PL_write_user", "single_family_platform_read_prod": "single_family_PL_read_only",
+                    "single_family_servicing_and_risk_read_np": "single_family_SR_read_only", "single_family_servicing_and_risk_write_np": "single_family_SR_write_user", "single_family_servicing_and_risk_read_prod": "single_family_SR_read_only",
+                    "single_family_sourcing_and_securitization_read_np": "single_family_SS_read_only", "single_family_sourcing_and_securitization_write_np": "single_family_SS_write_user", "single_family_sourcing_and_securitization_read_prod": "single_family_SS_read_only",
+                    "single_family_underwriting_read_np": "single_family_UW_read_only", "single_family_underwriting_write_np": "single_family_UW_write_user", "single_family_underwriting_read_prod": "single_family_UW_read_only"}
+
+     #role names for kibana space metrics read access, DOES NOT INCLUDE CHANGEMAN SPACE RIGHT NOW
+     space_metrics_dict = {"enterprise_confidential": "ec_metrics_read",
+                       "it_shared_services": "it_metrics_read",
+                       "investments_capital_markets": "ic_metrics_read",
+                       "multi_family": "multi_family_metrics_read",
+                       "single_family": "single_family_metrics_read",
+                       "single_family_platform": "single_family_metrics_read",
+                       "single_family_servicing_and_risk": "single_family_metrics_read",
+                       "single_family_sourcing_and_securitization": "single_family_metrics_read",
+                       "single_family_underwriting": "single_family_metrics_read",}
+     #role names for kibana space logs read access, DOES NOT INCLUDE CHANGEMAN SPACE RIGHT NOW
+     space_logs_dict = {"enterprise_confidential": "ec_logs_read",
+                       "it_shared_services": "it_logs_read",
+                       "investments_capital_markets": "ic_logs_read",
+                       "multi_family": "multi_family_logs_read",
+                       "single_family": "single_family_logs_read",
+                       "single_family_platform": "single_family_logs_read",
+                       "single_family_servicing_and_risk": "single_family_logs_read",
+                       "single_family_sourcing_and_securitization": "single_family_logs_read",
+                       "single_family_underwriting": "single_family_logs_read",}
+     rolemap_template = {
+     "enabled" : True,
+     "roles" : [],
+     "rules" : {
+       "any" : []
+     },
+      "metadata" : { }
+          }
+
+     headers = {
+         'Content-Type': 'application/json',
+     }
+     request_data = '{ "query": { "bool": { "filter": [ { "match_phrase": { "fields.request": "Add/remove Kibana Access" } }, { "match": { "fields.status": "Requested" } } ] } } }'
+     data = '{ "query": { "bool": { "filter": [ { "match_phrase": { "request": "Create New Watcher" } }, { "match": { "status": "requested" } } ] } } }'
+
+     all_requested = s.post(elasticsearch_url+'/snow-watchmaker/_search', headers=headers, data=data).json()
+     all_requested_access = s.post(elasticsearch_url + '/snow-watchmaker/_search', headers=headers, data=request_data).json()
+     for doc in all_requested["hits"]["hits"]:
+         watch = Watcher()
+         w_json = WrapperJson(doc)
+         id = w_json.get_value("_id")
+         try:
+             watcher_template = w_json.get_value("_source","watcher_template")
+             if watcher_template == "mf-log-alerts":
+                 mflog = MFLogWatcher(w_json.get_value("_source"), s, "/etc/config/mf-log-alerts.json")
+                 watcher_name = "mf_"+mflog._system_name+"_log"
+                 if mflog.deploy(s, watcher_name ):
+                     log("Watcher validated and deployed successfully: "+watcher_name)
+                     updated = w_json.get_value("_source")
+                     updated["status"] = "Success"
+                     print(updated)
+                     response = s.post(elasticsearch_url+'/snow-watchmaker/_doc/'+id , headers=headers, data=json.dumps(updated))
+                     print(response.json())
+                 else:
+                     log("Error while deploying watcher "+watcher_name)
+
+
+
+
+             elif watcher_template == "custom-log-alerts":
+                 clog = CustomLogWatcher(w_json.get_value("_source"), s, "/etc/config/custom-log-alerts.json")
+                 watcher_name = clog._watch_id
+                 if clog.deploy(s, watcher_name ):
+                     log("Watcher validated and deployed successfully: "+watcher_name)
+                     updated = w_json.get_value("_source")
+                     updated["status"] = "Success"
+                     print(updated)
+                     response = s.post(elasticsearch_url+'/snow-watchmaker/_doc/'+id , headers=headers, data=json.dumps(updated))
+                     print(response.json())
+                 else:
+                     log("Error while deploying watcher "+watcher_name)
+                 
+                 
+         except PathDoesntExistInJSONError as err:
+             log(err)
+         except Exception as err:
+             log("An exception has happened "+str(err))
+
+     for doc in all_requested_access["hits"]["hits"]:
+         w_json = WrapperJson(doc)
+         id = w_json.get_value("_id")
+         source = w_json.get_value("_source")
+         kib_access = KibanaAccess(source, s, elasticsearch_url, userId, password, )
+         kib_access.all_validation()
+         rolemap_req, map_name, space_name, role_access_level, role_env = kib_access.rolemap_get()
+         ad_field = {'field': {'groups': kib_access.active_directory_group}}
+         #check if request is asking for ADD or REMOVE access
+         if kib_access.metadata['Action:']  == "Add":
+             # check if role mapping namefield is empty, if it is, do a POST request for a new role mapping with the naming convention:
+             # space-name_access-level_environment_role_mapping and add in the provided AD group(s)
+             # If role mapping namefield already exists, check if provided AD group is already within the role_mapping, and add the AD group if it is not already present
+             # when complete, change the request field in the original snow_watchmaker index from "Requested" to "Implemented"
+             if rolemap_req == {} or map_name not in rolemap_req:
+                 #CURRENTLY CHANGEMAN SPACE HAS DIFFERENT ROLES CONVENTION THAN ALL OTHER SPACES, so conditionals were created for this space THIS MAY CHANGE IN FUTURE
+                 if space_name != "change_management":
+                     rolemap_data = rolemap_template
+                     rolemap_data['roles'].append(space_role_dict[space_name+'_'+role_access_level+'_'+role_env])
+                     rolemap_data['roles'].append(space_metrics_dict[space_name])
+                     rolemap_data['rules']['any'].append(ad_field)
+                     rolemap_data['roles'].append(space_logs_dict[space_name])
+
+                     if kib_access.rolemap_post(rolemap_data, map_name):
+                         log("The new rolemap for kibana request number " + id + " was created successfully")
+                         print("The new rolemap for kibana request number " + id + " was created successfully")
+                         doc['_source']['fields']['status'] = "Implemented"
+                         if kib_access.request_put(doc['_source'], id):
+                            log("The Kibana request " + id + " has been updated to implemented")
+                            print("The Kibana request " + id + " has been updated to implemented")
+                         else:
+                             log("rolemap creation successful, but Kibana Request: " + id + " in snow-watchmaker index update to 'Implemented' was not successful. Please update request to 'Implemented' manually")
+                             print("rolemap creation successful, but Kibana Request: " + id + " in snow-watchmaker index update to 'Implemented' was not successful. Please update request to 'Implemented' manually")
+                     else:
+                         doc['_source']['fields']['status'] = "Failed"
+                         if kib_access.request_put(doc['_source'], id):
+                             log("rolemap creation for kibana request number: " + id + " has failed")
+                             print("rolemap creation for kibana request number: " + id + " has failed")
+                         else:
+                             log("rolemap creation for Kibana Request: " + id + " has failed, and snow-watchmaker index update to 'Failed' was unsuccessful")
+                             print("rolemap creation for Kibana Request: " + id + " has failed, and snow-watchmaker index update to 'Failed' was unsuccessful")
+                 elif space_name == "change_management":
+                     rolemap_data = rolemap_template
+                     rolemap_data['roles'].append(space_role_dict[space_name + '_' + role_access_level + '_' + role_env])
+                     rolemap_data['rules']['any'].append(ad_field)
+                     if kib_access.rolemap_post(rolemap_data, map_name):
+                         log("The new rolemap for kibana request number " + id + " was created successfully")
+                         print("The new rolemap for kibana request number " + id + " was created successfully")
+                         doc['_source']['fields']['status'] = "Implemented"
+                         if kib_access.request_put(doc['_source'], id):
+                             log("The Kibana request " + id + " has been updated to 'Implemented' ")
+                             print("The Kibana request " + id + " has been updated to implemented")
+                         else:
+                             log("rolemap creation successful, but Kibana Request: " + id + "in snow-watchmaker index update to 'Implemented' was not successful. Please update request to 'Implemented' manually")
+                             print("rolemap creation successful, but Kibana Request: " + id + "in snow-watchmaker index update to 'Implemented' was not successful. Please update request to 'Implemented' manually")
+                     else:
+                         doc['_source']['fields']['status'] = "Failed"
+                         if kib_access.request_put(doc['_source'], id):
+                             log("rolemap creation for kibana request number: " + id + " has failed")
+                             print("rolemap creation for kibana request number: " + id + " has failed")
+                         else:
+                             log("rolemap creation for Kibana Request: " + id + " has failed, and snow-watchmaker index update to 'Failed' was unsuccessful")
+                             print("rolemap creation for Kibana Request: " + id + " has failed, and snow-watchmaker index update to 'Failed' was unsuccessful")
+
+             #if the rolemapping already exists according to the name convention, check if the AD group already exists in the role mapping
+             #and add the AD group in if it is not already in the role mapping
+             #the nested conditionals are just to check that the API requests work properly
+             elif map_name in rolemap_req:
+                 rolemap_data = rolemap_req[map_name]
+                 ad_list = []
+                 for i in range(0,len(rolemap_data['rules']['any'])):
+                     ad_list.append(rolemap_data['rules']['any'][i]['field']['groups'])
+                 if kib_access.active_directory_group not in ad_list:
+                     rolemap_data['rules']['any'].append(ad_field)
+                     if kib_access.rolemap_put(rolemap_data, map_name):
+                         log("The role mapping already exists, and the new AD group from this request has been added to the existing rolemapping: " + map_name)
+                         print("The role mapping already exists, and the new AD group from this request has been added to the existing rolemapping: " + map_name)
+                         doc['_source']['fields']['status'] = "Implemented"
+                         if kib_access.request_put(doc['_source'], id):
+                             log("The Kibana request " + id + " has been updated to 'Implemented'")
+                             print("The Kibana request " + id + " has been updated to implemented")
+                         else:
+                             log("The role mapping already exists" + map_name + " and the new AD group from this request has been added to the existing rolemapping: " +  map_name +". However, the the request: "+ id + "in snow-watchmaker index has failed to update to 'Implemented'. Please update to 'Implemented' manually")
+                             print("The role mapping already exists" + map_name + " and the new AD group from this request has been added to the existing rolemapping: " +  map_name +". However, the the request: "+ id + "in snow-watchmaker index has failed to update to 'Implemented'. Please update to 'Implemented' manually")
+                     else:
+                         doc['_source']['fields']['status'] = "Failed"
+                         if kib_access.request_put(doc['_source'], id):
+                             log("The role mapping already exists: "+ map_name + " but the new AD group from this request has failed to be added to the existing rolemapping")
+                             print("The role mapping already exists: "+ map_name + " but the new AD group from this request has failed to be added to the existing rolemapping")
+                         else:
+                             log("the role mapping already exists: "+ map_name + " but the new AD group from this request has failed to be added to the existing role mapping AND the snow-watchmaker index update to 'Failed' was unsuccessful. Please update request: "+ id + "to 'Failed' manually")
+                             print("the role mapping already exists: "+ map_name + " but the new AD group from this request has failed to be added to the existing role mapping AND the snow-watchmaker index update to 'Failed' was unsuccessful. Please update request: "+ id + "to 'Failed' manually")
+                 else:
+                     doc['_source']['fields']['status'] = "Implemented"
+                     if kib_access.request_put(doc['_source'], id):
+                         log("The role mapping already exists, and the AD group from this request is already within the existing rolemapping (i.e. access is already granted): " + map_name)
+                         print("The role mapping already exists, and the AD group from this request is already within the existing rolemapping (i.e. access is already granted): " + map_name)
+                     else:
+                         log("The role mapping already exists, and the AD group from this request is already within the existing rolemapping (i.e. access is already granted): "+ map_name + ". The snow-watchmaker index update to 'Implemented' was unsuccessful. Please update request: " + id + " to 'Implemented' manually")
+                         print("The role mapping already exists, and the AD group from this request is already within the existing rolemapping (i.e. access is already granted): "+ map_name + ". The snow-watchmaker index update to 'Implemented' was unsuccessful. Please update request: " + id + " to 'Implemented' manually")
+
+         #Check if request is asking for Remove access
+         elif kib_access.metadata["Action:"] == "Remove":
+             #If the rolemap does not exist by the naming convention, change the request status to implemented and log. Nothing has to be done
+             if rolemap_req == {} or map_name not in rolemap_req:
+                 doc['_source']['fields']['status'] = "Implemented"
+                 kib_access.request_put(doc['_source'], id)
+                 log("The role mapping does not exist yet by the naming convention set, so access cannot be removed automatically. If access is somehow granted, manually remove ad group from the corresponding AD group")
+                 print("The role mapping does not exist yet by the naming convention set, so access cannot be removed automatically. If access is somehow granted, manually remove ad group from the corresponding AD group")
+
+             #if the rolemap exists, check if the requested AD group is within the rolemap AD group, if it is there, delete the respective field with the requested AD group
+             #otherwise, don't do anything, change requested to implemented, and log it
+             elif map_name in rolemap_req:
+                 rolemap_data = rolemap_req[map_name]
+                 ad_list = []
+                 for i in range(0, len(rolemap_data['rules']['any'])):
+                     ad_group = rolemap_data['rules']['any'][i]['field']['groups']
+                     ad_list.append(ad_group)
+                     if kib_access.active_directory_group == ad_group:
+                         del rolemap_data['rules']['any'][i]
+                         kib_access.rolemap_put(rolemap_data, map_name)
+                         doc['_source']['fields']['status'] = "Implemented"
+                         kib_access.request_put(doc['_source'], id)
+                         break
+
+                 if kib_access.active_directory_group not in ad_list:
+                     doc['_source']['fields']['status'] = "Implemented"
+                     kib_access.request_put(doc['_source'], id)
+                     log("Requested AD Group: " + kib_access.active_directory_group + " is not in the requested role mapping by the naming convention set. If Access is still granted, manual removal of AD Group from Request: " + id + " is required")
+                     print("Requested AD Group: " + kib_access.active_directory_group + " is not in the requested role mapping by the naming convention set. If Access is still granted, manual removal of AD Group from Request: " + id + " is required")
+
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: watch-maker
+  namespace: elasticsearch
+spec:
+  schedule: "0 * * * *"  
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 120
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: watch-maker
+            image: moddel-bin.fhlmc.com/external/elastic-snapshot-restore:latest
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: "ELASTIC_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: elastic-secret
+                  key: elasticpswd
+            - name: "ELASTICSEARCH_URL_KEY"
+              valueFrom:
+                configMapKeyRef:
+                  name: watch-maker-files
+                  key: ELASTICSEARCH_URL
+            command: ["python","/usr/src/app/watchmaker.py"]        
+            args: ["elastic" ,"$(ELASTIC_PASSWORD)", "$(ELASTICSEARCH_URL_KEY)"]
+            volumeMounts:
+            - name: watch-maker
+              mountPath: /usr/src/app/watchmaker.py
+              subPath: watchmaker.py
+            - name: config-volume
+              mountPath: /etc/config
+          restartPolicy: Never
+          volumes:
+          - name: watch-maker
+            configMap:
+              name: watch-maker
+          - name: config-volume
+            configMap:
+              name: watch-maker-files
+          imagePullSecrets:
+          - name: entnpregistry
+

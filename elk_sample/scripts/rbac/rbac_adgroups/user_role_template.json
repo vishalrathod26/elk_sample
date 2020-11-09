@@ -1,0 +1,141 @@
+{
+	"cluster": [
+		"monitor"
+	],
+	"indices": [
+	{
+		"names": [
+			"metrics-kibana-space"
+		],
+		"privileges": [
+			"read"
+		],
+		"field_security": {
+			"grant": [
+				"*"
+			],
+			"except": []
+		},
+		"query": "",
+		"allow_restricted_indices": false
+	},
+	{
+		"names": [
+			"logs-kinaba-space"
+		],
+		"privileges": [
+			"read"
+		],
+		"field_security": {
+			"grant": [
+				"*"
+			],
+			"except": []
+		},
+		"query": "",
+		"allow_restricted_indices": false
+	},
+	{
+		"names": [
+			"winlogs-kibana-space"
+		],
+		"privileges": [
+			"read"
+		],
+		"field_security": {
+			"grant": [
+				"*"
+			],
+			"except": []
+		},
+		"query": "",
+		"allow_restricted_indices": false
+	},
+	{
+		"names": [
+			"uptime-kibana-space"
+		],
+		"privileges": [
+			"read"
+		],
+		"field_security": {
+			"grant": [
+				"*"
+			],
+			"except": []
+		},
+		"query": "",
+		"allow_restricted_indices": false
+	},
+	{
+		"names": [
+			"apm-kibana-space"
+		],
+		"privileges": [
+			"read"
+		],
+		"field_security": {
+			"grant": [
+				"*"
+			],
+			"except": []
+		},
+		"query": "",
+		"allow_restricted_indices": false
+	},
+	{
+		"names": [
+			"*platform_services_glb-*"
+		],
+		"privileges": [
+			"read"
+		],
+		"field_security": {
+			"grant": [
+				"*"
+			],
+			"except": []
+		},
+		"query": "",
+		"allow_restricted_indices": false
+	},
+	{
+		"names": [
+			".watches",
+			".triggered_watches",
+			".watcher_history-*"
+		],
+		"privileges": [
+			"read"
+		],
+		"field_security": {
+			"grant": [
+				"*"
+			]
+		},
+		"query": "",
+		"allow_restricted_indices": false
+	}
+	],
+	"applications": [
+	{
+		"application": "kibana-.kibana",
+		"privileges": [
+			"feature_discover.read",
+			"feature_visualize.read",
+			"feature_dashboard.read",
+			"feature_apm.read",
+			"feature_logs.read",
+			"feature_infrastructure.read"
+		],
+		"resources": [
+			""
+		]
+	}
+	],
+	"run_as": [],
+	"metadata": {},
+	"transient_metadata": {
+		"enabled": true
+	}
+}

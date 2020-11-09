@@ -1,0 +1,29 @@
+{
+    "cluster" : [ ],
+    "indices" : [
+      {
+        "names" : [
+          "metrics-*",
+          "logs-*",
+          "uptime-*",
+          "winlogs-*"
+        ],
+        "privileges" : [
+          "view_index_metadata"
+        ],
+        "field_security" : {
+          "grant" : [
+            "*"
+          ],
+          "except" : [ ]
+        },
+        "allow_restricted_indices" : false
+      }
+    ],
+    "applications" : [ ],
+    "run_as" : [ ],
+    "metadata" : { },
+    "transient_metadata" : {
+      "enabled" : true
+    }
+}

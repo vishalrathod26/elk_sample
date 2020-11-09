@@ -1,0 +1,117 @@
+{
+  "trigger": {
+    "schedule": {
+      "interval": "5m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "search_type": "query_then_fetch",
+        "indices": [
+          "metrics-*"
+        ],
+        "rest_total_hits_as_int": true,
+        "body": {
+          "query": {
+            "bool": {
+              "filter": [
+                {
+                  "exists": {
+                    "field": "prometheus.labels.dimension_Queue"
+                  }
+                },
+                {
+                  "bool": {
+                    "should": [
+                      {
+                        "range": {
+                          "prometheus.metrics.aws_mq_memory_usage_average": {
+                            "gt": 70
+                          }
+                        }
+                      }
+                    ],
+                    "minimum_should_match": 1
+                  }
+                },
+                {
+                  "range": {
+                    "@timestamp": {
+                      "gte": "now-5m"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.hits.total": {
+        "gt": 0
+      }
+    }
+  },
+  "actions": {
+    "send_email": {
+      "throttle_period_in_millis": 10000000,
+      "email": {
+        "profile": "standard",
+        "from": "****",
+        "to": [
+          "****",
+          "Cloud_Native_Platform_Support@****.com"
+        ],
+        "subject": "Amazon MQ Topics and Queues Memory Usage greater than 70%",
+        "body": {
+          "html": """<html> <p>Severity= Critical <br>Support Group= CloudNativePlatformSupport  <br>Emails= Cloud_Native_Platform_Support@****.com  <br>CI ID= HS0205 <br>Exception=AmazonMQ Topics/Queues Documents found with memory usage greater than 70% in the last 5 minutes \n </html>"""
+        }
+      }
+    },
+    "SNOWincident": {
+      "throttle_period_in_millis": 600000,
+      "webhook": {
+        "scheme": "https",
+        "host": "am-****-eks-apm-elastic-lz-01",
+        "port": 443,
+        "method": "post",
+        "path": "{{ctx.metadata.path}}",
+        "params": {},
+        "headers": {
+          "Accept": "{{ctx.metadata.Accept}}",
+          "Content-Type": "{{ctx.metadata.Content-Type}}"
+        },
+        "body": """{
+	"short_description":"{{ctx.metadata.short_description}}",
+	"description":"{{ctx.metadata.description}}",
+	"assignment_group":"{{ctx.metadata.assignment_group}}",
+	"category":"{{ctx.metadata.category}}",
+	"u_environment": "{{ctx.metadata.u_environment}}",
+	"u_string_not_found":"{{ctx.metadata.u_string_not_found}}",
+	"cmdb_ci":"{{ctx.metadata.cmdb_ci}}",
+	"priority":"{{ctx.metadata.priority}}",
+	"caller_id":"{{ctx.metadata.caller_id}}"
+}""",
+        "read_timeout_millis": 180000
+      }
+    }
+  },
+  "metadata": {
+    "short_description": "Goldfield - CRITICAL -Amazon MQ Topics and Queues Memory Usage greater than 70%",
+    "assignment_group": "Execution And Monitoring Support",
+    "Accept": "application/json",
+    "cmdb_ci": "HS0205 Message Broker Service Landing Zone",
+    "u_environment": "NonProduction",
+    "description": """\nSeverity= Critical \nSupport Group= CloudNativePlatformSupport  \nEmails= Cloud_Native_Platform_Support@****.com  \nCI ID= HS0205 \nException=Goldfield Platform - AMQ exceeds Topic/Q memory utilization \n""",
+    "priority": "4-Low",
+    "path": "/alert/",
+    "caller_id": "snwtelst",
+    "u_string_not_found": "true",
+    "category": "Application",
+    "Content-Type": "application/json"
+  }
+}

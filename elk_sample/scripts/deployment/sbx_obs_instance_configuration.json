@@ -1,0 +1,817 @@
+{
+  "instance_configurations": [
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "warm-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics-master-kb-apm-coordinator"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Master node(s)",
+      "discrete_sizes": {
+        "default_size": 8192,
+        "resource": "memory",
+        "sizes": [
+          8192,
+          16384,
+          32768,
+          65536
+        ]
+      },
+      "id": "obs-master",
+      "instance_type": "elasticsearch",
+      "name": "obs-master",
+      "node_types": [
+        "master"
+      ],
+      "storage_multiplier": 32
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "warm-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics-master-kb-apm-coordinator"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Kibana node(s)",
+      "discrete_sizes": {
+        "default_size": 8192,
+        "resource": "memory",
+        "sizes": [
+          4096,
+          8192
+        ]
+      },
+      "id": "obs-kibana",
+      "instance_type": "kibana",
+      "name": "obs-kibana",
+      "storage_multiplier": 16
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "warm-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics-master-kb-apm-coordinator"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES APM node(s)",
+      "discrete_sizes": {
+        "default_size": 8192,
+        "resource": "memory",
+        "sizes": [
+          2048,
+          4096,
+          8192
+        ]
+      },
+      "id": "obs-apm",
+      "instance_type": "apm",
+      "name": "obs-apm",
+      "storage_multiplier": 16
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "warm-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics-master-kb-apm-coordinator"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Coordinator and Ingest node(s)",
+      "discrete_sizes": {
+        "default_size": 8192,
+        "resource": "memory",
+        "sizes": [
+          4096,
+          8192,
+          16384,
+          18432,
+          32768,
+          36864,
+          55296
+        ]
+      },
+      "id": "obs-coordinator",
+      "instance_type": "elasticsearch",
+      "name": "obs-coordinator",
+      "node_types": [
+        "ingest"
+      ],
+      "storage_multiplier": 16.0
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "warm-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics-master-kb-apm-coordinator"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Machine Learning node(s)",
+      "discrete_sizes": {
+        "default_size": 8192,
+        "resource": "memory",
+        "sizes": [
+          4096,
+          8192,
+          16384,
+          18432,
+          32768,
+          36864,
+          55296
+        ]
+      },
+      "id": "obs-ml",
+      "instance_type": "elasticsearch",
+      "name": "obs-ml",
+      "node_types": [
+        "ml"
+      ],
+      "storage_multiplier": 8
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "hot-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Data Hot Metrics node(s)",
+      "discrete_sizes": {
+        "default_size": 32768,
+        "resource": "memory",
+        "sizes": [
+          16384,
+          32768,
+          65536
+        ]
+      },
+      "id": "obs-hot-metrics",
+      "instance_type": "elasticsearch",
+      "name": "obs-hot-metrics",
+      "node_types": [
+        "data"
+      ],
+      "storage_multiplier": 20
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "warm-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics-master-kb-apm-coordinator"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Data Warm Metrics node(s)",
+      "discrete_sizes": {
+        "default_size": 16384,
+        "resource": "memory",
+        "sizes": [
+          16384,
+          32768,
+          65536
+        ]
+      },
+      "id": "obs-warm-metrics",
+      "instance_type": "elasticsearch",
+      "name": "obs-warm-metrics",
+      "node_types": [
+        "data"
+      ],
+      "storage_multiplier": 100
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "hot-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Data Hot Logs node(s)",
+      "discrete_sizes": {
+        "default_size": 65536,
+        "resource": "memory",
+        "sizes": [
+          16384,
+          32768,
+          65536
+        ]
+      },
+      "id": "obs-hot-logs",
+      "instance_type": "elasticsearch",
+      "name": "obs-hot-logs",
+      "node_types": [
+        "data"
+      ],
+      "storage_multiplier": 20
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "warm-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-metrics-master-kb-apm-coordinator"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Data Warm Logs node(s)",
+      "discrete_sizes": {
+        "default_size": 16384,
+        "resource": "memory",
+        "sizes": [
+          16384,
+          32768,
+          65536
+        ]
+      },
+      "id": "obs-warm-logs",
+      "instance_type": "elasticsearch",
+      "name": "obs-warm-logs",
+      "node_types": [
+        "data"
+      ],
+      "storage_multiplier": 100
+    },
+    {
+      "allocator_filter": {
+        "bool": {
+          "must": [
+            {
+              "bool": {
+                "must": [
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "class"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "cold-default"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "metadata",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "metadata.key": {
+                                  "value": "purpose"
+                                }
+                              }
+                            },
+                            {
+                              "term": {
+                                "metadata.value.keyword": {
+                                  "value": "logs-control"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "description": "Instance Conf for ES Data Cold Logs node(s)",
+      "discrete_sizes": {
+        "default_size": 8192,
+        "resource": "memory",
+        "sizes": [
+          8192,
+          16384,
+          32768,
+          65536
+        ]
+      },
+      "id": "obs-cold-logs",
+      "instance_type": "elasticsearch",
+      "name": "obs-cold-logs",
+      "node_types": [
+        "data"
+      ],
+      "storage_multiplier": 200
+    }
+  ]
+}

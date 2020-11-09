@@ -1,0 +1,25 @@
+{
+  "enabled" : true,
+  "roles" : [
+    "gcp_audit_role"
+  ],
+  "rules" : {
+    "all" : [
+      {
+        "field" : {
+          "realm.name" : "ad"
+        }
+      },
+      {
+        "all" : [
+          {
+            "field" : {
+              "groups" : "PCF-GG-security_services_global-Auditors"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata" : { }
+}

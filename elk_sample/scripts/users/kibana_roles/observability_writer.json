@@ -1,0 +1,34 @@
+{
+  "cluster": [
+      "manage_ilm",
+      "manage_index_templates",
+      "monitor"
+	],
+  "indices": [
+    {
+      "names": [
+        "metrics-*",
+        "logs-*",
+        "uptime-*",
+        "winlogs-*",
+        "dlq-*"
+      ],
+      "privileges": [
+        "all"
+      ],
+      "field_security": {
+        "grant": [
+          "*"
+        ],
+        "except": []
+      },
+      "allow_restricted_indices": false
+    }
+  ],
+  "applications": [],
+  "run_as": [],
+  "metadata": {},
+  "transient_metadata": {
+    "enabled": true
+  }
+}

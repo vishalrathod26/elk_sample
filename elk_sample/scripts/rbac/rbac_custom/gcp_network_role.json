@@ -1,0 +1,100 @@
+{
+  "cluster" : [
+    "monitor"
+  ],
+  "indices" : [
+    {
+      "names" : [
+        "logs-gcp-gsuite-*"
+      ],
+      "privileges" : [
+        "read",
+        "read_cross_cluster"
+      ],
+      "field_security" : {
+        "grant" : [
+          "*"
+        ],
+        "except" : [ ]
+      },
+      "allow_restricted_indices" : false
+    },
+    {
+      "names" : [
+        "logs-gcp-vpcflow-*"
+      ],
+      "privileges" : [
+        "read",
+        "read_cross_cluster"
+      ],
+      "field_security" : {
+        "grant" : [
+          "*"
+        ]
+      },
+      "allow_restricted_indices" : false
+    },
+    {
+      "names" : [
+        "logs-gcp-firewall-*"
+      ],
+      "privileges" : [
+        "read",
+        "read_cross_cluster"
+      ],
+      "field_security" : {
+        "grant" : [
+          "*"
+        ]
+      },
+      "allow_restricted_indices" : false
+    },
+    {
+      "names" : [
+        ".watches",
+        ".triggered_watches",
+        ".watcher_history-*"
+      ],
+      "privileges" : [
+        "read"
+      ],
+      "field_security" : {
+        "grant" : [
+          "*"
+        ]
+      },
+      "query" :"{\"bool\":{\"filter\":[{\"term\":{\"metadata.organization\":\"gcp_network\"}}]}}",
+      "allow_restricted_indices" : false
+    }
+  ],
+  "applications" : [
+    {
+      "application" : "kibana-.kibana",
+      "privileges" : [
+        "feature_discover.all",
+        "feature_visualize.all",
+        "feature_dashboard.all",
+        "feature_dev_tools.all",
+        "feature_advancedSettings.all",
+        "feature_indexPatterns.all",
+        "feature_savedObjectsManagement.all",
+        "feature_graph.all",
+        "feature_apm.all",
+        "feature_maps.all",
+        "feature_canvas.all",
+        "feature_infrastructure.all",
+        "feature_logs.all",
+        "feature_siem.all",
+        "feature_uptime.all"
+      ],
+      "resources" : [
+        "space:gcp_network"
+      ]
+    }
+  ],
+  "run_as" : [ ],
+  "metadata" : { },
+  "transient_metadata" : {
+    "enabled" : true
+  }
+}
