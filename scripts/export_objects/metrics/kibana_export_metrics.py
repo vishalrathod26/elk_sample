@@ -13,14 +13,14 @@
 # spaces path: path to csv file containing list of all the spaces
 # Update values of KIBANA_USERNAME and KIBANA_PASSWORD with username and password of user
 # For example here we are taking objects from metrics.corelogic.net and migrating them in
-# spaces in https://a8630f04c0724f71bbbb4e7a9cb8a6e2.proxy-ece-sbx.solutions.corelogic.com:9243
+# spaces in https://****
 # Another file change.json contains all the index patterns that needs to be replaced,
 # Initially, there is only one index pattern that has to be replaced i.e metrcbeat-8 to metrics-<kibana-space>-*
 #
 # Sample .env file:
 # EXCEL_PATH=kibana_export_metrics.xlsx
-# PREVIOUS_VERSION=https://metrics.corelogic.net
-# NEXT_VERSION=https://a8630f04c0724f71bbbb4e7a9cb8a6e2.proxy-ece-sbx.solutions.corelogic.com:9243
+# PREVIOUS_VERSION=https://****
+# NEXT_VERSION=https:/****
 # KIBANA_IMPORTUSERNAME=xxxx
 # KIBANA_IMPORTPASSWORD=xxxx
 # KIBANA_EXPORTUSERNAME=xxxx
