@@ -1,0 +1,7 @@
+# list of filenames where file contains a single ILM policy
+logs_ilm_policy_large.json
+logs_ilm_policy_medium.json
+logs_ilm_policy_small.json
+metrics_ilm_policy_large.json
+metrics_ilm_policy_medium.json
+metrics_ilm_policy_small.json

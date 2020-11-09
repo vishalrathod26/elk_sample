@@ -1,0 +1,9 @@
+{
+	"username" : "watcher_admin",
+	"roles" : [ "watcher_admin" ],
+	"full_name" : "Watcher Admin",
+	"email" : "",
+	"metadata" : { },
+	"enabled" : true,
+	"password" : "changeme"
+}

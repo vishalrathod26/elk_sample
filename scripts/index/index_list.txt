@@ -1,0 +1,7 @@
+# list of base index names
+metrics
+uptime
+logs
+winlogs
+analytics
+apm

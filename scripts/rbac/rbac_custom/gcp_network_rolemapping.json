@@ -1,0 +1,25 @@
+{
+  "enabled" : true,
+  "roles" : [
+    "gcp_network_role"
+  ],
+  "rules" : {
+    "all" : [
+      {
+        "field" : {
+          "realm.name" : "ad"
+        }
+      },
+      {
+        "all" : [
+          {
+            "field" : {
+              "groups" : "PCF-GG-platform_services_global-network-InfraOperators "
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata" : { }
+}

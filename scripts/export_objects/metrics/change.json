@@ -1,0 +1,3 @@
+{"metricbeat-*": "metrics-<sid>-*",
+"3187d6b0-cf50-11e9-8234-2762d45792f0": "metrics-<sid>-*",
+"pcf-platform-metric-*": "metrics-pcf_admin-*"}

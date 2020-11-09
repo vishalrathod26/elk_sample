@@ -1,0 +1,9 @@
+{
+	"username" : "logstash_admin",
+	"roles" : [ "logstash_admin", "monitoring_user" ],
+	"full_name" : "Logstash Admin",
+	"email" : "",
+	"metadata" : { },
+	"enabled" : true,
+	"password" : "changeme"
+}

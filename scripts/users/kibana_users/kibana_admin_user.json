@@ -1,0 +1,9 @@
+{
+	"username" : "kibana_admin",
+	"roles" : [ "kibana_system", "kibana_admin" ],
+	"full_name" : "Kibana Admin",
+	"email" : "",
+	"metadata" : { },
+	"enabled" : true,
+	"password" : "changeme"
+}

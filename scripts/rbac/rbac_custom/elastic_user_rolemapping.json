@@ -1,0 +1,21 @@
+{
+  "enabled" : true,
+  "roles" : [
+    "elastic_user_role"
+  ],
+  "rules" : {
+    "all" : [
+      {
+        "field" : {
+          "realm.name" : "ad"
+        }
+      },
+      {
+        "field" : {
+          "groups" : "PCF-GG-platform_services_global-ELK-MLA-DataOps"
+        }
+      }
+    ]
+  },
+  "metadata" : { }
+}

@@ -1,0 +1,53 @@
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "min_age": "0ms",
+        "actions": {
+          "rollover": {
+            "max_size": "30gb"
+          },
+          "set_priority": {
+            "priority": 100
+          }
+        }
+      },
+      "warm": {
+        "min_age": "15d",
+        "actions": {
+          "allocate": {
+            "include": {},
+            "exclude": {},
+            "require": {
+              "data": "warm_logs"
+            }
+          },
+          "forcemerge": {
+            "max_num_segments": 1
+          },
+          "set_priority": {
+            "priority": 50
+          }
+        }
+      },
+      "cold": {
+        "min_age": "90d",
+        "actions": {
+          "allocate": {
+            "include": {},
+            "exclude": {},
+            "require": {
+              "data": "cold_logs"
+            }
+          }
+        }
+      },
+      "delete": {
+        "min_age": "365d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}

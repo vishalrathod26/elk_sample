@@ -1,0 +1,160 @@
+As of 07/16/2020 a set of 19 scripts have been authored to facilitate automation of ECE and Elasticsearch.
+This document describes the scripts and the order of execution.
+
+The list of scripts are:
+  create_kibana_roles.js
+  delete_kibana_roles.js
+  create_rbac.js
+  delete_rbac.js
+  create_user.js
+  delete_user.js
+  create_rbac_custom.js
+  delete_rbac_custom.js
+  create_deployment_templates.js
+  delete_deployment.js
+  create_deployment.js
+  delete_deployment_templates.js
+  delete_spaces.js
+  create_spaces.js
+  delete_index_templates.js
+  create_index_templates.js
+  delete_ilm_policy.js
+  create_ilm_policy.js
+  create_indexpattern.js
+
+These script are stored in the git repo mla-infrastructure, in the scripts directory and sub-directories.
+  
+Some of these scripts create cluster level objects while other create Kibana objects. The credentials
+and URLs are different between the cluster and Kibana.
+
+TODO discuss the .env file and credentials.
+TODO automate apply license
+TODO automate updating deployment with snapshots
+TODO automate updating deployment with monitoring
+
+1. Users
+================================
+A number of Kibana roles and users are created to support logstash, software automation and other functions
+Some of the users are based on system roles while other are base on custom roles. The API calls are made against
+elasticsearch and not Kibana as they are cluster level objects.
+
+1.1 Custom Roles
+=======================
+The are two custom roles that are created
+
+usage: node create_kibana_roles.js <kibana-roles-filename> <environment>
+
+ex:
+node create_kibana_roles.js kibana_roles_list.txt sbx
+
+1.1 Custom Users
+=======================
+Once the roles are created, the Kibana users can be created. Some users need to be created in the monitoring cluster
+so the cluster designation needs to be provided. It is main or monitor.
+
+TODO: what to do about creds and URL when monitoring cluster
+
+usage: create_all_users <environment> <cluster>
+
+ex:
+./create_all_users.sh sbx main
+
+
+2. Deployment
+================================
+The scripts that must be run at least once are the scripts to create instance configurations and 
+deployment templates. The instance configurations are created first and then a deployment template that
+is based on the instance configurations is created. These scripts create cluster objects. The scripts
+are in the dir mla-infrastructure/scripts/deployment
+
+usage: node create-deployment_templates.js <deployment-template-filename> <instance-configuration-filename> <environment>
+
+ex:
+$ node create_deployment_templates.js sbx_obs_deployment_template.json sbx_obs_instance_configuration.json sbx
+
+
+Once the instance configurations and deplyment template are created, the next step is to created a deployment.
+
+usage: node create-deployment.js <deployment-template-name> <deployment-filename> <environment>
+
+ex:
+node create_deployment.js Observability-SBX sbx_obs_deployment.json sbx
+
+
+3. Spaces, ILM, Index Templates and RBAC
+========================================
+Once a deployment is created the scripts to create Kibana spaces, ILM, index templates and RBAC are run.
+
+3.1 Spaces
+====================
+Spaces are created first.
+
+usage: node create_spaces.js <org-space-filename> <environment>
+
+ex:
+
+$ node create_spaces.js org_space_20200624.csv sbx
+
+3.2 ILM Policies
+====================
+After the space are create the ILM policies can be created. Note that the API calls are made against the cluster 
+and not Kibana as these are cluster level objects. 
+
+usage: node create_ilm_policy.js <policy-list-filename> <environment>
+
+ex:
+
+node create_ilm_policy.js ilm_policy_list.txt sbx
+
+3.3 Index Templates
+====================
+Once the ILM policies are created the index templates are created. These are cluster level objects so the API calls
+are made against the cluster and not Kibana
+
+usage: node create_index_templates.js <index-template-filename> <org-space-filename> <environment>
+
+ex:
+$ node create_index_templates.js metricbeat-template-7.6.0.json org_space_20200624.csv 
+
+3.4 RBAC
+===================
+There are two sets of RBAC scripts. The RBAC AD group scripts create roles and role mapping between AD groups and elastic roles.
+The second set of scripts the RBAC Custom create roles and role mapping for custom elastic roles. These are cluster level object
+and so the API calls are made against elastic and not kibana
+
+
+3.4.1 RBAC for AD
+==================
+
+usage: node create_rbac.js <org-space-filename> <environment>
+
+ex:
+$ node create_rbac.js org_space_20200624.csv sbx
+
+
+3.4.2 RBAC for Custom Roles
+===========================
+The custom roles are to support job functions within elastic.
+
+usage: node create_rbac_custom.js <rbac-custom-filename> <environment>
+
+ex:
+node create_rbac_custom.js rbac_custom.csv sbx
+
+4 Index Patterns
+===========================
+This script creates 3 sets of index patterns:
+  a. 6 common index patterns in all the spaces
+    They are: metrics-<kibana-space>-*, logs-<kibana-space>-*, uptime-<kibana-space>-*,
+              analytics-<kibana-space>-*, apm-<kibana-space>-*,  winlogs-<kibana-space>-*
+      
+  b. 9 custom index patterns of pcf_admin, gcp_audit, gcp_network space.
+
+  c. platform-services-glb-* index pattern in all the spaces.
+
+  usage: node create_indexpattern.js <org-space-filename> <environment>
+
+ex:
+node create_rbac_custom.js rg_space_20200624.csv sbx
+
+

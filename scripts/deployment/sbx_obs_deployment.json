@@ -1,0 +1,234 @@
+{
+  "name": "observability-sbx",
+  "metadata": {
+    "system_owned": false
+  },
+  "resources": {
+    "elasticsearch": [
+      {
+        "region": "ece-region",
+        "ref_id": "main-elasticsearch",
+        "plan": {
+          "cluster_topology": [
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ]
+              },
+              "instance_configuration_id": "effd1b0cd66f4f2aaeab05b7c5c3bf75",
+              "node_type": {
+                "data": false,
+                "ingest": false,
+                "master": true
+              },
+              "size": {
+                "resource": "memory",
+                "value": 8192
+              },
+              "zone_count": 3
+            },
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ],
+                "node_attributes": {
+                  "data": "hot_metrics"
+                }
+              },
+              "instance_configuration_id": "ed93a37ab0b34c2ab32c9ad3b4d2d4ac",
+              "node_type": {
+                "data": true,
+                "ingest": false,
+                "master": false
+              },
+              "size": {
+                "resource": "memory",
+                "value": 32768
+              },
+              "zone_count": 3
+            },
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ],
+                "node_attributes": {
+                  "data": "warm_metrics"
+                }
+              },
+              "instance_configuration_id": "71d4af301f464181969d6b1daaafa46e",
+              "node_type": {
+                "data": true,
+                "ingest": false,
+                "master": false
+              },
+              "size": {
+                "resource": "memory",
+                "value": 16384
+              },
+              "zone_count": 3
+            },
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ],
+                "node_attributes": {
+                  "data": "hot_logs"
+                }
+              },
+              "instance_configuration_id": "5cee0f372fb14229a3c7576849c8052b",
+              "node_type": {
+                "data": true,
+                "ingest": false,
+                "master": false
+              },
+              "size": {
+                "resource": "memory",
+                "value": 65536
+              },
+              "zone_count": 3
+            },
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ],
+                "node_attributes": {
+                  "data": "warm_logs"
+                }
+              },
+              "instance_configuration_id": "f52feb26f3d140ceb963fcb96970b548",
+              "node_type": {
+                "data": true,
+                "ingest": false,
+                "master": false
+              },
+              "size": {
+                "resource": "memory",
+                "value": 16384
+              },
+              "zone_count": 3
+            },
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ],
+                "node_attributes": {
+                  "data": "cold_logs"
+                }
+              },
+              "instance_configuration_id": "1fb0ae953d4e40d2975f8440667a2d4b",
+              "node_type": {
+                "data": true,
+                "ingest": false,
+                "master": false
+              },
+              "size": {
+                "resource": "memory",
+                "value": 8192
+              },
+              "zone_count": 3
+            },
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ]
+              },
+              "instance_configuration_id": "a823780ce3704c6c84c94e379e1cc8df",
+              "node_type": {
+                "data": false,
+                "ingest": true,
+                "master": false
+              },
+              "size": {
+                "resource": "memory",
+                "value": 8192
+              },
+              "zone_count": 3
+            },
+            {
+              "elasticsearch": {
+                "enabled_built_in_plugins": [
+                  "repository-gcs"
+                ]
+              },
+              "instance_configuration_id": "609c8e22b3bc41fdbb010b019d95622d",
+              "node_type": {
+                "data": false,
+                "ingest": false,
+                "master": false,
+                "ml": true
+              },
+              "size": {
+                "resource": "memory",
+                "value": 8192
+              },
+              "zone_count": 3
+            }
+          ],
+          "elasticsearch": {
+            "version": "7.8.0"
+          },
+          "deployment_template": {
+            "id": "c798baa2a057442c9084d96da21237ec"
+          }
+        },
+        "settings": {
+          "dedicated_masters_threshold": 1,
+          "curation": {
+            "specs": []
+          }
+        }
+      }
+    ],
+    "kibana": [
+      {
+        "region": "ece-region",
+        "elasticsearch_cluster_ref_id": "main-elasticsearch",
+        "ref_id": "main-kibana",
+        "plan": {
+          "cluster_topology": [
+            {
+              "instance_configuration_id": "1b7f59760a7b4cd4afb220cf83537e54",
+              "size": {
+                "resource": "memory",
+                "value": 8192
+              },
+              "zone_count": 3
+            }
+          ],
+          "kibana": {
+            "version": "7.8.0"
+          }
+        }
+      }
+    ],
+    "apm": [
+      {
+        "region": "ece-region",
+        "elasticsearch_cluster_ref_id": "main-elasticsearch",
+        "ref_id": "main-apm",
+        "plan": {
+          "apm": {
+            "version": "7.8.0"
+          },
+          "cluster_topology": [
+            {
+              "instance_configuration_id": "8e7851ef2cb04b05a33e4ec93bd168f3",
+              "size": {
+                "resource": "memory",
+                "value": 2048
+              },
+              "zone_count": 3
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

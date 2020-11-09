@@ -1,0 +1,9 @@
+{
+	"username" : "monitoring_writer",
+	"roles" : [ "monitoring_writer", "monitoring_user" ],
+	"full_name" : "Monitoring Writer",
+	"email" : "",
+	"metadata" : { },
+	"enabled" : true,
+	"password" : "changeme"
+}
