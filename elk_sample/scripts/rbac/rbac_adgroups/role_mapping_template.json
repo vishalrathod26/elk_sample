@@ -1,0 +1,23 @@
+{
+	"enabled": true,
+	"roles": [
+		""
+	],
+	"rules": {
+		"all": [
+		{
+			"field": {
+				"realm.name": "pingid"
+			}
+		},
+		{
+			"field": {
+				"groups": ""
+			}
+		}
+		]
+	},
+	"metadata": {
+		"version": 1
+	}
+}

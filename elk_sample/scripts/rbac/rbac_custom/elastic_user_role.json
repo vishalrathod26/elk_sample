@@ -1,0 +1,44 @@
+{
+  "cluster" : [
+    "monitor"
+  ],
+  "indices" : [
+    {
+      "names" : [
+        "*"
+      ],
+      "privileges" : [
+        "read",
+        "read_cross_cluster"
+      ],
+      "field_security" : {
+        "grant" : [
+          "*"
+        ],
+        "except" : [ ]
+      },
+      "allow_restricted_indices" : false
+    }
+  ],
+  "applications" : [
+    {
+      "application" : "kibana-.kibana",
+      "privileges" : [
+        "feature_discover.read",
+        "feature_visualize.read",
+        "feature_dashboard.read",
+        "feature_apm.read",
+		"feature_logs.read",
+		"feature_infrastructure.read"
+      ],
+      "resources" : [
+        "*"
+      ]
+    }
+  ],
+  "run_as" : [ ],
+  "metadata" : { },
+  "transient_metadata" : {
+    "enabled" : true
+  }
+}

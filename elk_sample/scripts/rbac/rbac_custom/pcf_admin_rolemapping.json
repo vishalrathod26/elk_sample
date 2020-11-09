@@ -1,0 +1,21 @@
+{
+  "enabled" : true,
+  "roles" : [
+    "pcf_admin_role"
+  ],
+  "rules" : {
+    "all" : [
+      {
+        "field" : {
+          "realm.name" : "ad"
+        }
+      },
+      {
+        "field" : {
+          "groups" : "CN=PCF-GG-platform_services_global-pcf-InfraOperators,OU=SecurityGroups,OU=EnterpriseGroups,OU=Corelogic,DC=infosolco,DC=net"
+        }
+      }
+    ]
+  },
+  "metadata" : { }
+}

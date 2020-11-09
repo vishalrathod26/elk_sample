@@ -1,0 +1,3 @@
+# list of filenames where each file contains a single Kibana role
+metadata_user.json
+observability_writer.json

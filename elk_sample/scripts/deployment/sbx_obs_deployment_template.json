@@ -1,0 +1,252 @@
+{
+  "cluster_template": {
+    "apm": {
+      "plan": {
+        "apm": {},
+        "cluster_topology": [
+          {
+            "instance_configuration_id": "b2ecefca2e5a43f6bc392b4e4ea6ff19",
+            "size": {
+              "resource": "memory",
+              "value": 8192
+            },
+            "zone_count": 3
+          }
+        ]
+      }
+    },
+    "kibana": {
+      "plan": {
+        "cluster_topology": [
+          {
+            "instance_configuration_id": "2b44c16671d444b2b8545005d4be7063",
+            "size": {
+              "resource": "memory",
+              "value": 8192
+            },
+            "zone_count": 3
+          }
+        ],
+        "kibana": {}
+      }
+    },
+    "plan": {
+      "cluster_topology": [
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ]
+          },
+          "instance_configuration_id": "0ac13cf12eee4a17aac2c095bad9946e",
+          "node_type": {
+            "data": false,
+            "ingest": false,
+            "master": true
+          },
+          "size": {
+            "resource": "memory",
+            "value": 8192
+          },
+          "zone_count": 3
+        },
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ],
+            "node_attributes": {
+              "data": "hot_metrics"
+            }
+          },
+          "instance_configuration_id": "150eacaa209a40debaf11bd471a0a1a4",
+          "node_type": {
+            "data": true,
+            "ingest": false,
+            "master": false
+          },
+          "size": {
+            "resource": "memory",
+            "value": 32768
+          },
+          "zone_count": 3
+        },
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ],
+            "node_attributes": {
+              "data": "warm_metrics"
+            }
+          },
+          "instance_configuration_id": "fd003d1e12ce44cd8115c2bb223c51e7",
+          "node_type": {
+            "data": true,
+            "ingest": false,
+            "master": false
+          },
+          "size": {
+            "resource": "memory",
+            "value": 16384
+          },
+          "zone_count": 3
+        },
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ],
+            "node_attributes": {
+              "data": "hot_logs"
+            }
+          },
+          "instance_configuration_id": "84ab8c19447947e1908498e65748766e",
+          "node_type": {
+            "data": true,
+            "ingest": false,
+            "master": false
+          },
+          "size": {
+            "resource": "memory",
+            "value": 65536
+          },
+          "zone_count": 3
+        },
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ],
+            "node_attributes": {
+              "data": "warm_logs"
+            }
+          },
+          "instance_configuration_id": "559b69bf5ed84b819ededc5d82c2883e",
+          "node_type": {
+            "data": true,
+            "ingest": false,
+            "master": false
+          },
+          "size": {
+            "resource": "memory",
+            "value": 16384
+          },
+          "zone_count": 3
+        },
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ],
+            "node_attributes": {
+              "data": "cold_logs"
+            }
+          },
+          "instance_configuration_id": "5a2c7527e9ef4d2b8ada4f795d563dd9",
+          "node_type": {
+            "data": true,
+            "ingest": false,
+            "master": false
+          },
+          "size": {
+            "resource": "memory",
+            "value": 8192
+          },
+          "zone_count": 3
+        },
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ]
+          },
+          "instance_configuration_id": "626f27be2d2b447b8356a42dce8b59b3",
+          "node_type": {
+            "data": false,
+            "ingest": true,
+            "master": false
+          },
+          "size": {
+            "resource": "memory",
+            "value": 8192
+          },
+          "zone_count": 3
+        },
+        {
+          "elasticsearch": {
+            "enabled_built_in_plugins": [
+              "ingest-geoip",
+              "ingest-user-agent",
+              "delete-by-query",
+              "repository-gcs",
+              "watcher",
+              "graph"
+            ]
+          },
+          "instance_configuration_id": "72bbb9af19374c24a410c0763bf4231b",
+          "node_type": {
+            "data": false,
+            "ingest": false,
+            "master": false,
+            "ml": true
+          },
+          "size": {
+            "resource": "memory",
+            "value": 8192
+          },
+          "zone_count": 3
+        }
+      ],
+      "elasticsearch": {}
+    },
+    "settings": {
+      "dedicated_masters_threshold": 1
+    }
+  },
+  "description": "Deployment Template for Observability SBX",
+  "id": "",
+  "name": "Observability-SBX",
+  "source": {
+    "action": "deployments.create-template",
+    "admin_id": "admin",
+    "date": "2020-06-22T19:11:28.000Z",
+    "facilitator": "adminconsole"
+  },
+  "system_owned": false
+}

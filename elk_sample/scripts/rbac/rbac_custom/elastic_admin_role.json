@@ -1,0 +1,39 @@
+{
+  "cluster" : [
+    "monitor"
+  ],
+  "indices" : [
+    {
+      "names" : [
+        "*"
+      ],
+      "privileges" : [
+        "read",
+        "read_cross_cluster"
+      ],
+      "field_security" : {
+        "grant" : [
+          "*"
+        ],
+        "except" : [ ]
+      },
+      "allow_restricted_indices" : false
+    }
+  ],
+  "applications" : [
+    {
+      "application" : "kibana-.kibana",
+      "privileges" : [
+        "all"
+      ],
+      "resources" : [
+        "*"
+      ]
+    }
+  ],
+  "run_as" : [ ],
+  "metadata" : { },
+  "transient_metadata" : {
+    "enabled" : true
+  }
+}

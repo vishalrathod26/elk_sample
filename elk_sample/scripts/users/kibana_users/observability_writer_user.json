@@ -1,0 +1,9 @@
+{
+	"username" : "observability_writer",
+	"roles" : [ "observability_writer" ],
+	"full_name" : "Observability Writer",
+	"email" : "",
+	"metadata" : { },
+	"enabled" : true,
+	"password" : "changeme"
+}
