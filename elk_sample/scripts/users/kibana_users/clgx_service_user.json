@@ -1,9 +1,0 @@
-{
-	"username" : "clgx_service",
-	"roles" : [ "superuser" ],
-	"full_name" : "CLGX Service Account",
-	"email" : "",
-	"metadata" : { },
-	"enabled" : true,
-	"password" : "changeme"
-}

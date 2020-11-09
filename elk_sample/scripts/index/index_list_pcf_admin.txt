@@ -1,3 +1,0 @@
-# list of base index names
-metrics
-logs

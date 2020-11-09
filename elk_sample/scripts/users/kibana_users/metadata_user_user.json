@@ -1,9 +1,0 @@
-{
-	"username" : "metadata_user",
-	"roles" : [ "metadata_user" ],
-	"full_name" : "Metadata User",
-	"email" : "",
-	"metadata" : { },
-	"enabled" : true,
-	"password" : "changeme"
-}
